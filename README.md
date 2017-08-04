@@ -9,14 +9,14 @@ anison unity client
     
     void Awake () {
 	Room.Instance.GetUserStatus ("28", (RoomResult result) => {
-		if(result.isError) {
-			Debug.Log("error");
-		} else {
-			Debug.Log(result.userStatus.status);
-			if(result.userStatus.status == "playing") {
-				testChatServer(result.userStatus.roomId);
-			}
-		}
+	    if(result.isError) {
+	        Debug.Log("error");
+	    } else {
+	        Debug.Log(result.userStatus.status);
+	        if(result.userStatus.status == "playing") {
+	            testChatServer(result.userStatus.roomId);
+	        }
+	    }
 	});
     }
 

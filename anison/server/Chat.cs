@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections;
-using UnityEngine;
 using socket.io;
 
 namespace anison.server {
 	
-	public class Chat : MonoBehaviour {
+	public class Chat {
 
 		const string URL_CHAT = "http://anison.chat.stzapp.net";
 
@@ -35,4 +34,3 @@ namespace anison.server {
 		}
 	}
 }
-

@@ -7,10 +7,21 @@ namespace anison.server {
 	
 	[System.Serializable]
 	public class UserStatus {
+		
 		public string status;
 		public string roomId;
+
 		override public string ToString() {
 			return "status=" + status + ", roomId=" + roomId;
+		}
+	}
+
+	public class RoomResult {
+		public bool isError { get; private set; }
+		public UserStatus userStatus { get; private set; }
+		public RoomResult(bool isError, UserStatus userStatus) {
+			this.isError = isError;
+			this.userStatus = userStatus;
 		}
 	}
 
@@ -32,25 +43,26 @@ namespace anison.server {
 			}
 		}
 
-		public void GetUserStatus (string userId, Action<UserStatus> callback) {
+		public void GetUserStatus (string userId, Action<RoomResult> callback) {
 			string requestUrl = URL_ROOM + "?id=" + userId;
 			StartCoroutine(Reqeust(requestUrl, callback));
 		}
 
-		IEnumerator Reqeust(string requestUrl, Action<UserStatus> callback) {
+		IEnumerator Reqeust(string requestUrl, Action<RoomResult> callback) {
 			UnityWebRequest www = UnityWebRequest.Get(requestUrl);
 			yield return www.Send();
-
+			RoomResult result;
 			if(www.isError) {
 				Debug.Log(www.error);
+				result = new RoomResult (true, null);
 			}
 
 			else {
-				Debug.Log(www.downloadHandler.text);
 				UserStatus userStatus = JsonUtility.FromJson<UserStatus> (www.downloadHandler.text);
-				if (null != callback) {
-					callback (userStatus);
-				}
+				result = new RoomResult (false, userStatus);
+			}
+			if (null != callback) {
+				callback (result);
 			}
 		}
 	}

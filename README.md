@@ -3,6 +3,10 @@ anison unity client
 
 # Example
 ```c#
+    using anison.server;
+    
+    ....
+    
     void Awake () {
         Room.Instance.GetUserStatus ("27", (UserStatus userStatus) => {
             if(userStatus.status == "waiting") {

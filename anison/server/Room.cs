@@ -16,10 +16,11 @@ namespace anison.server {
 		}
 	}
 
-	public class RoomResult {
+	[System.Serializable]
+	public class UserStatusResult {
 		public bool isError { get; private set; }
 		public UserStatus userStatus { get; private set; }
-		public RoomResult(bool isError, UserStatus userStatus) {
+		public UserStatusResult(bool isError, UserStatus userStatus) {
 			this.isError = isError;
 			this.userStatus = userStatus;
 		}
@@ -43,23 +44,23 @@ namespace anison.server {
 			}
 		}
 
-		public void GetUserStatus (string userId, Action<RoomResult> callback) {
+		public void GetUserStatus (string userId, Action<UserStatusResult> callback) {
 			string requestUrl = URL_ROOM + "?id=" + userId;
 			StartCoroutine(Reqeust(requestUrl, callback));
 		}
 
-		IEnumerator Reqeust(string requestUrl, Action<RoomResult> callback) {
+		IEnumerator Reqeust(string requestUrl, Action<UserStatusResult> callback) {
 			UnityWebRequest www = UnityWebRequest.Get(requestUrl);
 			yield return www.Send();
-			RoomResult result;
+			UserStatusResult result;
 			if(www.isError) {
 				Debug.Log(www.error);
-				result = new RoomResult (true, null);
+				result = new UserStatusResult (true, null);
 			}
 
 			else {
 				UserStatus userStatus = JsonUtility.FromJson<UserStatus> (www.downloadHandler.text);
-				result = new RoomResult (false, userStatus);
+				result = new UserStatusResult (false, userStatus);
 			}
 			if (null != callback) {
 				callback (result);

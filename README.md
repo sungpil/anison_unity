@@ -5,7 +5,7 @@ anison unity client
 ```c#
     using anison.server;
     
-    .....
+    .......
     
     void Awake () {
 	Room.Instance.GetUserStatus ("28", (UserStatusResult result) => {
